@@ -12,4 +12,4 @@ COPY . .
 EXPOSE 8501
 
 # Comando padrão para rodar o Streamlit
-CMD [["streamlit", "run", "streamlit_app.py"]]
+CMD ["streamlit", "run", "streamlit_app.py"]
