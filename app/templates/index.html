@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Secretaria da Saúde</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link href="static/css/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <img id="logosecretaria" src="static/images/SecretariaEducacao.png">
+            <a class="navbar-brand" href="/">Home</a>
+            <a class="navbar-brand" href="#">Dados Pessoais</a>
+            <a class="navbar-brand" href="#">Exame</a>
+        </nav>
+        <br>
+        <div id="pagina">
+            <form action="/formulario" method="post">
+                <div class="container">
+                    <div class="row" id="dadospessoais">
+                        <div class="col">
+                            <div class="row" id="divEscola">
+                                <label for="escola" id="Escola">Escola</label><br>
+                                <input type="text" class="form-control" id="InputEscola" name="InputEscola">
+                            </div>
+                            <div class="row" id="divDataHora">
+                                <label for="DataHoraEscaneamento" id="DataHoraEscaneamento">Data/Hora Escaneamento</label><br>
+                                <input type="datetime-local" value="2024-05-27T19:30" min="2024-01-01T00:00" max="2026-12-31T00:00" class="form-control" id="InputDataHoraEscaneamento" name="InputDataHoraEscaneamento">
+                            </div>
+                            <div class="row" id="divSexo">
+                                <label for="sexo" id="Sexo">Sexo</label><br>
+                                <select name="InputSexo" id="InputSexo">
+                                    <option value="">Selecione</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Feminino">Feminino</option>
+                                </select>
+                            </div>
+                            <div class="row" id="divNascimento">
+                                <label for="Nascimento" id="Nascimento">Data de Nascimento</label><br>
+                                <input type="date" class="form-control" id="InputNascimento" name="InputNascimento">
+                            </div>
+                            <div class="row" id="divNome">
+                                <label for="Nome" id="Nome">Nome</label><br>
+                                <input type="text" class="form-control" id="InputNome" name="InputNome">
+                            </div>
+                            <div class="row" id="divSobrenome">
+                                <label for="Sobrenome" id="Sobrenome">Sobrenome</label><br>
+                                <input type="text" class="form-control" id="InputSobrenome" name="InputSobrenome">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row" id="dadosexame">
+                        <div class="col" id="primeira">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="Input1" name="Input1">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="Input2" name="Input2">
+                            </div>
+                                <img id="reta" src="static/images/reta.png">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="Input3" name="Input3">
+                            </div>
+                            <h1>OD</h1>
+                        </div>
+                        <div class="col" id="segunda">
+                            <div id="olhos">
+                                <div id="row1col2">
+                                    <img id="olho-direito" src="static/images/olho-direito.jpg">
+                                </div>
+                            </div>
+                            <div id="InputsGrau">
+                                <div id="Inputs">
+                                    <input type="text" placeholder="SE" class="form-control" id="Input9" name="Input9">
+                                </div>
+                                <div id="Inputs">
+                                    <input type="text" placeholder="OS" class="form-control" id="Input10" name="Input10">
+                                    <input type="text" placeholder="DC" class="form-control" id="Input11" name="Input11">
+                                    <input type="text" placeholder="Axis" class="form-control" id="Input12" name="Input12">
+                                </div>
+                            </div>    
+                        </div>    
+                        <div class="col" id="indicativo-olho1">
+                            <h2>D</h2>
+                        </div>
+                        <div class="col" id="terceira">
+                            <div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="Input4" name="Input4">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="Input5" name="Input5">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col" id="indicativo-olho2">
+                            <h2>E</h2>
+                        </div>
+                        <div class="col" id="quarta">
+                            <div id="olhos">
+                                <div id="row1col4">
+                                    <img id="olho-esquerdo" src="static/images/olho-esquerdo.jpg">
+                                </div>
+                            </div>
+                            <div id="InputsGrau">
+                                <div id="Inputs">
+                                    <input type="text" placeholder="SE" class="form-control" id="Input13" name="Input13">
+                                </div>
+                                <div id="Inputs">
+                                    <input type="text" placeholder="OS" class="form-control" id="Input14" name="Input14">
+                                    <input type="text" placeholder="DC" class="form-control" id="Input15" name="Input15">
+                                    <input type="text" placeholder="Axis" class="form-control" id="Input16" name="Input16">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col" id="quinta">
+                            <div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="Input6" name="Input6">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="Input7" name="Input7">
+                                </div>
+                                <img id="reta" src="static/images/reta.png">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="Input8" name="Input8">
+                                </div>
+                                <h1>OS</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <input id="submit" type="submit" value="Enviar">
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
+
+

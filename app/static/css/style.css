@@ -1,0 +1,353 @@
+#pagina {
+    background-color: white;
+}
+
+nav {
+    width: 100%;
+    margin: 0px 0px 0px;
+    background-color: #ffcc29;
+    color: #515151;
+}
+
+.navbar-brand {
+    margin: 0px 20px 0px;
+    color: #515151;
+}
+
+.navbar-brand:hover {
+    color: #ff6900;
+}
+
+#logosecretaria {
+    width: 200px;
+    height: 50px;
+}
+
+.col {
+    background-color: white;
+}
+
+#dadospessoais {
+    background-color: white;
+    border-radius: 5px;
+}
+
+#dadosexame {
+    background-color: white;
+}
+
+.container {
+    width: 90%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#primeira {
+    background-color: white;
+    text-align: center;
+}
+
+#segunda {
+    background-color: white;
+    width: 350px;
+}
+
+#terceira {
+    background-color: white;
+    margin: 0px 20px 0px;
+}
+
+#quarta {
+    background-color: white;
+    width: 350px;
+}
+
+
+#quinta {
+    background-color: white;
+}
+
+#olho-direito {
+    width: 300px;
+    height: 300px;
+}
+
+#olho-esquerdo {
+    width: 300px;
+     height: 300px;
+}
+
+#Input1 {
+    border-color: #ffcc29;
+    width: 100%;
+    margin: 20px 0px 40px;
+}
+
+#Input2 {
+    border-color: #ffcc29;
+    width: 100%;
+    margin: 0px 0px 0px;
+}
+
+#Input3 {
+    border-color: #ffcc29;
+    width: 100%;
+    margin: 0px 0px 0px;
+}
+
+#Input4 {
+    border-color: #ffcc29;
+    width: 100%;
+    margin: 100px 0px 50px;
+}
+
+#Input5 {
+    border-color: #ffcc29;
+    width: 100%;
+    margin: 0px 0px 0px;
+}
+
+#Input6 {
+    border-color: #ffcc29;
+    width: 100%;
+    margin: 20px 0px 40px;
+}
+
+#Input7 {
+    border-color: #ffcc29;
+    width: 100%;
+    margin: 0px 0px 0px;
+}
+
+#Input8 {
+    border-color: #ffcc29;
+    width: 100%;
+    margin: 0px 0px 0px;
+}
+
+#Input9 {
+    border-color: #ffcc29;
+    width: 100%;
+    margin: 0px 0px 5px;
+}
+
+#Input10 {
+    border-color: #ffcc29;
+}
+
+#Input11 {
+    border-color: #ffcc29;
+}
+
+#Input12 {
+    border-color: #ffcc29;
+}
+
+#Input13 {
+    border-color: #ffcc29;
+    width: 100%;
+    margin: 0px 0px 5px;
+}
+
+#Input14 {
+    border-color: #ffcc29;
+}
+
+#Input15 {
+    border-color: #ffcc29;
+}
+
+#Input16 {
+    border-color: #ffcc29;
+}
+
+#reta {
+    width: 100%;
+    height: 35px;
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0px 0px;
+}
+
+#olhos {
+    text-align: center;
+}
+
+#indicativo-olho1 {
+    margin-top: 140px;
+}
+
+#indicativo-olho2 {
+    margin-top: 140px;
+    margin-left: 20px;
+}
+
+#InputsGrau {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 300px;
+    padding: 10px; /* Adicionando espaçamento interno */
+    border: 1px solid white; /* Adicionando borda */
+    border-radius: 5px; /* Arredondando as bordas */
+}
+
+#Inputs {
+    display: flex;
+    gap: 5px;
+}
+
+#Inputs input {
+    text-align: center;
+}
+
+#submit {
+    text-align: center;
+    border-radius: 5px;
+    background-color: #ffcc29;
+    border-color: #ffcc29;
+    color: #515151;
+    margin-top: 30px;
+    margin-right: 30px;
+    margin-bottom: 30px;
+}
+
+#submit:hover {
+    color: #ff6900;
+}
+
+#divEscola {    
+    text-align: left;
+    position: relative;
+    margin: 50px 300px 0px;
+}
+
+#Escola {
+    color: #515151;
+    position: relative;
+    margin: 3px 0px 0px;
+}
+
+#InputEscola {
+    border-color: #ffcc29;
+    color: #515151;
+    position: relative;
+    width: 500px;
+    margin: 0px 5px 0px;
+}
+
+#divDataHora {
+    display: flex;    
+    text-align: left;
+    position: relative;
+    margin: 30px 300px 0px;
+}
+
+#DataHoraEscaneamento {
+    color: #515151;
+    position: relative;
+    margin: 3px 0px 0px;
+}
+
+#InputDataHoraEscaneamento {
+    color: #515151;
+    border-color: #ffcc29;
+    position: relative;
+    width: 500px;
+    margin: 0px 5px 0px;
+}
+
+#divSexo {
+    display: flex;    
+    text-align: left;
+    position: relative;
+    margin: 30px 300px 0px;
+}
+
+select {
+    border-radius: 5px;
+    border-color: #ffcc29;
+}
+
+#Sexo {
+    color: #515151;
+    position: relative;
+    margin: 0px 0px 0px;
+}
+
+#InputSexo {
+    color: #515151;
+    border-color: #ffcc29;
+    position: relative;
+    width: 500px;
+    margin: 3px 5px 0px;
+}
+
+#divNascimento {
+    display: flex;    
+    text-align: left;
+    position: relative;
+    margin: 30px 300px 0px;
+}
+
+#Nascimento {
+    color: #515151;
+    position: relative;
+    margin: 3px 0px 0px;
+}
+
+#InputNascimento {
+    color: #515151;
+    border-color: #ffcc29;
+    position: relative;
+    width: 500px;
+    margin: 0px 5px 0px;
+}
+
+#divNome {
+    display: flex;    
+    text-align: left;
+    position: relative;
+    margin: 30px 300px 0px;
+}
+
+#Nome {
+    color: #515151;
+    position: relative;
+    margin: 3px 0px 0px;
+}
+
+#InputNome {
+    color: #515151;
+    border-color: #ffcc29;
+    position: relative;
+    width: 500px;
+    margin: 0px 5px 0px;
+}
+
+#divSobrenome {
+    display: flex;    
+    text-align: left;
+    position: relative;
+    margin: 30px 300px 0px;
+}
+
+#Sobrenome {
+    color: #515151;
+    position: relative;
+    margin: 3px 0px 0px;
+}
+
+#InputSobrenome {
+    color: #515151;
+    border-color: #ffcc29;
+    position: relative;
+    width: 500px;
+    margin: 0px 5px 0px;
+}
+
+
