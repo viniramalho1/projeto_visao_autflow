@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import subprocess
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/secretaria'
@@ -77,6 +78,20 @@ def process_form():
 
     # Para este exemplo, redirecionamos para a página inicial
     return redirect(url_for('index'))
+
+# Subprocesso para iniciar o Streamlit
+def start_streamlit():
+    subprocess.Popen(["streamlit", "run", "./dash/streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"])
+
+# Inicia o Streamlit quando o Flask é carregado
+with app.app_context():
+    start_streamlit()
+
+# Rota para fornecer dados
+@app.route('/api/data', methods=['GET'])
+def streamlit_dashboard():
+    # Redireciona diretamente para o Streamlit
+    return redirect("http://localhost:8501", code=302)
 
 if __name__ == '__main__':
     app.run(debug=False, host="0.0.0.0", port=5000)
