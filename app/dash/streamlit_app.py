@@ -1,48 +1,36 @@
 import streamlit as st
 import pandas as pd
-import requests
-import pydeck as pdk
-import os
+from sqlalchemy import create_engine
 
-API_URL = os.getenv("API_URL", "http://127.0.0.1:5000/api/data")
-response = requests.get(API_URL)
+# Configurações do banco de dados
+DB_USER = "seu_usuario"
+DB_PASS = "sua_senha"
+DB_HOST = "localhost"
+DB_PORT = "5432"
+DB_NAME = "sua_base"
 
-# Obtenção de dados da API
-response = requests.get(API_URL)
-if response.status_code == 200:
-    data = response.json()
-    df = pd.DataFrame(data)
-else:
-    st.error("Erro ao obter dados da API Flask.")
-    df = pd.DataFrame()
+# Criando a conexão
+def get_connection():
+    connection_string = f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    engine = create_engine(connection_string)
+    return engine
 
-# Mapa interativo
-if not df.empty:
-    layer = pdk.Layer(
-        "ScatterplotLayer",
-        data=df,
-        get_position="[longitude, latitude]",
-        get_radius=10000,
-        get_fill_color="[200, 30, 0, 160]",
-        pickable=True
-    )
+# Função para buscar dados do banco
+def fetch_data(query):
+    engine = get_connection()
+    with engine.connect() as connection:
+        data = pd.read_sql(query, connection)
+    return data
 
-    view_state = pdk.ViewState(
-        latitude=df["latitude"].mean(),
-        longitude=df["longitude"].mean(),
-        zoom=4,
-        pitch=50
-    )
+# Streamlit App
+st.title("Dashboard - Dados do Banco de Dados")
 
-    tooltip = {"html": "<b>Região:</b> {region}<br><b>Valor:</b> {value}"}
-
-    deck = pdk.Deck(layers=[layer], initial_view_state=view_state, tooltip=tooltip)
-
-    st.pydeck_chart(deck)
-
-else:
-    st.warning("Nenhum dado para exibir.")
-
-st.title("Dashboard com Flask e Streamlit")
-st.write("Dados consumidos diretamente da API Flask.")
-
+try:
+    # Escreva sua query aqui
+    query = "SELECT * FROM sua_tabela LIMIT 10"
+    df = fetch_data(query)
+    st.write("Dados do Banco de Dados:")
+    st.dataframe(df)
+except Exception as e:
+    st.error("Erro ao conectar ou buscar dados do banco.")
+    st.write(f"Detalhes do erro: {e}")
