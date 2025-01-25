@@ -1,50 +1,33 @@
-# Num Piscar de Olhos
+# Projeto Num Piscar de Olhos
 
-**Num Piscar de Olhos** é um sistema desenvolvido para realizar exames de acuidade visual em alunos de escolas públicas, com o objetivo de identificar a necessidade de uso de óculos. Os dados coletados são armazenados para análise e geração de relatórios detalhados.
+O **Projeto Num Piscar de Olhos** é uma iniciativa voltada para realizar exames de acuidade visual em alunos de escolas, com o objetivo de identificar a necessidade de óculos e armazenar os dados coletados para análises futuras.
 
-## 📋 Funcionalidades
+## Funcionalidades Principais
 
-- Registro de alunos e seus dados pessoais.
-- Realização de exames de acuidade visual:
-  - **Exame de Miopia**
-  - **Exame de Hipermetropia**
-  - **Exame de Astigmatismo**
-  - **Exame de Presbiopia**
-- Geração de relatórios:
-  - Alunos atendidos por escola.
-  - Alunos atendidos por Região Administrativa (RA).
-- Mapa interativo com escolas atendidas e número de alunos examinados.
+- **Registro de Exames**: Armazenamento dos resultados de exames visuais realizados nos alunos.
+- **Geolocalização**: Mapa interativo mostrando as escolas atendidas e o número de alunos examinados.
+- **Relatórios**: Geração de relatórios por Região Administrativa, permitindo análises detalhadas.
+- **Interface Simples**: Sistema de fácil navegação para consulta e inserção de dados.
 
-## 🛠️ Tecnologias Utilizadas
+## Estrutura do Banco de Dados
 
-- **Backend**: PostgreSQL
-- **Ferramentas de Desenvolvimento**:
-  - SQL Workbench para gerenciamento do banco de dados.
-  - GitHub para controle de versão.
-- **Linguagens**: SQL, Markdown (para documentação).
+O banco de dados é relacional, construído para atender às necessidades do projeto com as seguintes tabelas principais:
 
-## 📂 Estrutura do Banco de Dados
+- **Alunos**: Contém informações dos alunos examinados, como nome, data de nascimento e escola.
+- **Exames**: Registra os resultados detalhados de cada exame realizado.
+- **Escolas**: Cadastro de escolas atendidas, incluindo endereço e região administrativa.
+- **Regiões Administrativas**: Tabela para organização e geração de relatórios por área.
 
-### Tabelas Principais
-- `alunos`: Dados dos alunos (nome, idade, RA, etc.).
-- `escolas`: Informações das escolas atendidas.
-- `exames`: Resultados dos exames realizados.
-- `regioes_administrativas`: Dados sobre as Regiões Administrativas.
+## Tecnologias Utilizadas
 
-### Relacionamentos
-- Um aluno pertence a uma única escola.
-- Uma escola pertence a uma única RA.
-- Um exame está associado a um aluno.
+- **Backend**: PostgreSQL para gerenciamento do banco de dados.
+- **Ferramentas de Desenvolvimento**: SQL Workbench para administração do banco de dados.
+- **Frontend (Planejado)**: Mapa interativo e interface amigável para relatórios e consultas.
 
-## 🚀 Configuração e Instalação
+## Como Contribuir
 
-### Requisitos
-- **PostgreSQL** instalado.
-- SQL Workbench para gerenciar o banco de dados.
-- Git instalado para clonar o repositório.
+Contribuições são bem-vindas! Caso tenha interesse, entre em contato ou envie suas sugestões diretamente neste repositório.
 
-### Passos
-1. Clone o repositório:
-   ```bash
-   git clone <URL_DO_REPOSITORIO>
-   cd num-piscar-de-olhos
+---
+
+**Nota**: Este projeto ainda está em desenvolvimento. Recursos adicionais e melhorias serão implementados em breve.
