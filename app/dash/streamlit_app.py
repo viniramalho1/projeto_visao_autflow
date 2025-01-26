@@ -23,7 +23,6 @@ def execute_query(query, conn):
     try:
         with conn.cursor() as cur:
             cur.execute(query)
-            # Se a consulta for do tipo SELECT, retorna dados e nomes de colunas
             if query.strip().lower().startswith("select"):
                 return cur.fetchall(), [desc[0] for desc in cur.description]
             conn.commit()
@@ -33,84 +32,49 @@ def execute_query(query, conn):
         return None, None
 
 def main():
-    st.title("Dashboard com PostgreSQL e Streamlit")
-    st.write("Conecte-se ao banco de dados e visualize os dados interativamente.")
-    
+    st.title("Dashboard de Visualização de Dados")
+    st.write("Explore dados diretamente do banco PostgreSQL e visualize gráficos interativos.")
+
     # Conexão com o banco de dados
     conn = connect_to_database()
     if not conn:
         st.stop()
-    
-    # Menu lateral de opções
-    menu = ["Visualizar Dados", "Gráfico Interativo", "Inserir Dados", "Excluir Dados"]
-    choice = st.sidebar.selectbox("Escolha uma opção", menu)
-    
-    # 1. Visualizar Dados
-    if choice == "Visualizar Dados":
-        st.subheader("Tabela de Dados")
-        query = "SELECT * FROM public.teste;"  # Substitua pelo nome exato da sua tabela
-        data, columns = execute_query(query, conn)
-        
-        if data and columns:
-            df = pd.DataFrame(data, columns=columns)
-            st.dataframe(df)
-        else:
-            st.warning("Nenhum dado encontrado na tabela.")
-    
-    # 2. Gráfico Interativo
-    elif choice == "Gráfico Interativo":
-        st.subheader("Gráfico com Dados")
-        query = "SELECT * FROM public.teste;"  # Substitua pelo nome exato da sua tabela
-        data, columns = execute_query(query, conn)
-        
-        if data and columns:
-            df = pd.DataFrame(data, columns=columns)
-            
-            # Selecionar colunas para o eixo X e Y
-            x_axis = st.selectbox("Selecione o eixo X", df.columns, key="x_axis")
-            y_axis = st.selectbox("Selecione o eixo Y", df.columns, key="y_axis")
-            
-            # Botão para gerar o gráfico
-            if st.button("Gerar Gráfico"):
-                # Verifica se a coluna selecionada para o eixo Y é numérica
-                if pd.api.types.is_numeric_dtype(df[y_axis]):
-                    fig = px.bar(df, x=x_axis, y=y_axis, title="Gráfico Interativo")
-                    st.plotly_chart(fig)
-                else:
-                    st.error(f"A coluna '{y_axis}' precisa ser numérica para criar o gráfico.")
-        else:
-            st.warning("Nenhum dado disponível na tabela para exibir.")
-    
-    # 3. Inserir Dados
-    elif choice == "Inserir Dados":
-        st.subheader("Inserir Novo Registro")
-        
+
+    # Consulta para obter dados
+    query = "SELECT * FROM num_piscar_de_olhos.regiao_administrativa;"  # Ajuste conforme necessário
+    data, columns = execute_query(query, conn)
+
+    if data and columns:
+        df = pd.DataFrame(data, columns=columns)
+
+        st.subheader("Gráficos")
         col1, col2 = st.columns(2)
+
+        st.subheader("Outro Gráfico Interativo")
+        fig3 = px.scatter(df, x=df.columns[0], y=df.columns[1], title="Gráfico de Dispersão")
+        st.plotly_chart(fig3)
+
+        st.subheader("Relatórios")
+        col3, col4 = st.columns(2)
+        
+
         with col1:
-            nome = st.text_input("Nome")
-            idade = st.number_input("Idade", min_value=0, step=1)
+            fig1 = px.bar(df, x=df.columns[0], y=df.columns[1], title="Gráfico de Barras")
+            st.plotly_chart(fig1)
+
         with col2:
-            email = st.text_input("Email")
-            cidade = st.text_input("Cidade")
+            fig2 = px.line(df, x=df.columns[0], y=df.columns[1], title="Gráfico de Linhas")
+            st.plotly_chart(fig2)
         
-        if st.button("Inserir"):
-            insert_query = f"""
-            INSERT INTO public.teste (nome, idade, email, cidade)
-            VALUES ('{nome}', {idade}, '{email}', '{cidade}');
-            """
-            _, _ = execute_query(insert_query, conn)
-            st.success("Registro inserido com sucesso!")
-    
-    # 4. Excluir Dados
-    elif choice == "Excluir Dados":
-        st.subheader("Excluir Registro")
-        id_registro = st.number_input("ID do Registro para excluir", min_value=0, step=1)
-        
-        if st.button("Excluir"):
-            delete_query = f"DELETE FROM public.teste WHERE id = {id_registro};"
-            _, _ = execute_query(delete_query, conn)
-            st.success("Registro excluído com sucesso!")
-    
+        with col3:
+            st.dataframe(df)
+
+        with col4:
+            st.dataframe(df)
+
+    else:
+        st.warning("Nenhum dado disponível na tabela para exibir.")
+
     # Finaliza a conexão
     conn.close()
 
