@@ -4,3 +4,4 @@ Flask-SQLAlchemy
 SQLAlchemy
 pymysql
 psycopg2-binary
+plotly
