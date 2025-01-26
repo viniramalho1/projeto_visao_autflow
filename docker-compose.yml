@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:15    # Ou a versão de sua preferência

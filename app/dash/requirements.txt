@@ -1,7 +1,6 @@
 streamlit
 pandas
-pydeck
-requests
 Flask-SQLAlchemy
 SQLAlchemy
 pymysql
+psycopg2-binary
