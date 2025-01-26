@@ -12,4 +12,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
 
 # Comando para iniciar o Flask
+<<<<<<< HEAD
 CMD ["python" ,"app.py"]
+=======
+CMD ["python3" ,"app.py"]
+>>>>>>> d2c75242f29033c66abbfd10200abe4ae2e5a555

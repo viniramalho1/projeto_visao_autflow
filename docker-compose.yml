@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> d2c75242f29033c66abbfd10200abe4ae2e5a555
 services:
   db:
     image: postgres:15    # Ou a versão de sua preferência
