@@ -1,7 +1,6 @@
 import random
 from faker import Faker
 import psycopg2
-from psycopg2 import sql
 
 # Configurações de conexão com o banco de dados
 def get_connection():
@@ -15,20 +14,30 @@ def get_connection():
 # Gera dados falsos
 fake = Faker()
 
-def insert_regioes_administrativas(cursor, qtd=5):
-    for _ in range(qtd):
+# Regiões pré-definidas com coordenadas reais
+REGIOES = [
+    ("Taguatinga", "DF", -15.8350, -48.0533),
+    ("Ceilândia", "DF", -15.8150, -48.1128),
+    ("Estrutural", "DF", -15.7754, -47.9836),
+    ("Brasília", "DF", -15.7801, -47.9292),
+    ("Águas Claras", "DF", -15.8295, -48.0288),
+    ("Vicente Pires", "DF", -15.8005, -48.0120)
+]
+
+def insert_regioes_administrativas(cursor):
+    for nome, estado, lat, lon in REGIOES:
         cursor.execute(
-            "INSERT INTO postgres.num_piscar_de_olhos.regiao_administrativa (Nome, Estado) VALUES (%s, %s)",
-            (fake.city(), fake.state_abbr())
+            "INSERT INTO num_piscar_de_olhos.regiao_administrativa (Nome, Estado) VALUES (%s, %s)",
+            (nome, estado)
         )
 
 def insert_enderecos(cursor, qtd=10):
-    cursor.execute("SELECT ID_Regiao FROM postgres.num_piscar_de_olhos.regiao_administrativa")
-    regioes = [row[0] for row in cursor.fetchall()]
-
-    for _ in range(qtd):
+    cursor.execute("SELECT ID_Regiao, Nome FROM num_piscar_de_olhos.regiao_administrativa")
+    regioes = {row[1]: row[0] for row in cursor.fetchall()}
+    
+    for nome, _, lat, lon in REGIOES:
         cursor.execute(
-            """INSERT INTO postgres.num_piscar_de_olhos.endereco
+            """INSERT INTO num_piscar_de_olhos.endereco
             (Logradouro, Numero, Complemento, Bairro, Cidade, Estado, CEP, Latitude, Longitude, ID_Regiao)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
             (
@@ -36,22 +45,22 @@ def insert_enderecos(cursor, qtd=10):
                 fake.building_number(),
                 fake.secondary_address(),
                 fake.city_suffix(),
-                fake.city(),
-                fake.state_abbr(),
+                nome,
+                "DF",
                 fake.zipcode(),
-                fake.latitude(),
-                fake.longitude(),
-                random.choice(regioes) if regioes else None
+                lat,
+                lon,
+                regioes.get(nome, None)
             )
         )
 
 def insert_escolas(cursor, qtd=5):
-    cursor.execute("SELECT ID_Endereco FROM postgres.num_piscar_de_olhos.endereco")
+    cursor.execute("SELECT ID_Endereco FROM num_piscar_de_olhos.endereco")
     enderecos = [row[0] for row in cursor.fetchall()]
 
     for _ in range(qtd):
         cursor.execute(
-            "INSERT INTO postgres.num_piscar_de_olhos.escola (Nome, ID_Endereco) VALUES (%s, %s)",
+            "INSERT INTO num_piscar_de_olhos.escola (Nome, ID_Endereco) VALUES (%s, %s)",
             (
                 fake.company(),
                 random.choice(enderecos) if enderecos else None
@@ -59,15 +68,15 @@ def insert_escolas(cursor, qtd=5):
         )
 
 def insert_alunos(cursor, qtd=20):
-    cursor.execute("SELECT ID_Escola FROM postgres.num_piscar_de_olhos.escola")
+    cursor.execute("SELECT ID_Escola FROM num_piscar_de_olhos.escola")
     escolas = [row[0] for row in cursor.fetchall()]
 
-    cursor.execute("SELECT ID_Regiao FROM postgres.num_piscar_de_olhos.regiao_administrativa")
+    cursor.execute("SELECT ID_Regiao FROM num_piscar_de_olhos.regiao_administrativa")
     regioes = [row[0] for row in cursor.fetchall()]
 
     for _ in range(qtd):
         cursor.execute(
-            """INSERT INTO postgres.num_piscar_de_olhos.aluno (Nome, Data_Nascimento, Sexo, ID_Escola, ID_Regiao)
+            """INSERT INTO num_piscar_de_olhos.aluno (Nome, Data_Nascimento, Sexo, ID_Escola, ID_Regiao)
             VALUES (%s, %s, %s, %s, %s)""",
             (
                 fake.name(),
@@ -79,12 +88,12 @@ def insert_alunos(cursor, qtd=20):
         )
 
 def insert_exames(cursor, qtd=50):
-    cursor.execute("SELECT ID_Aluno FROM postgres.num_piscar_de_olhos.aluno")
+    cursor.execute("SELECT ID_Aluno FROM num_piscar_de_olhos.aluno")
     alunos = [row[0] for row in cursor.fetchall()]
 
     for _ in range(qtd):
         cursor.execute(
-            """INSERT INTO postgres.num_piscar_de_olhos.exame
+            """INSERT INTO num_piscar_de_olhos.exame
             (ID_Aluno, Data_Exame, Esferico_OD, Cilindrico_OD, Eixo_OD, Dioptria_Esferica_OD, 
              Esferico_OS, Cilindrico_OS, Eixo_OS, Dioptria_Esferica_OS, 
              Tamanho_Pupila_OD, Tamanho_Pupila_OS, Observacoes)

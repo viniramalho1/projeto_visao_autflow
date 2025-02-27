@@ -2,4 +2,3 @@ Flask
 Flask-SQLAlchemy
 SQLAlchemy
 pymysql
-gunicorn
