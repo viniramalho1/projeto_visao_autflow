@@ -1,74 +1,158 @@
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Date
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import declarative_base  # Importe declarative_base diretamente
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, Date, ForeignKey, Float, Text
+from sqlalchemy.orm import sessionmaker, relationship, declarative_base
+from sqlalchemy.sql import text  # Importar text para executar comandos SQL brutos
 import random
 
-# Define a string de conexão para o seu banco de dados
-connection_string = 'postgresql+psycopg2://admin:WUvU8D5EFk5WLn0fOjtByT5pF91SzCsX@dpg-cpkt62q0si5c73d1kmf0-a.oregon-postgres.render.com/oftalmologista'
-
-# Crie um engine
+# String de conexão para o banco de dados
+connection_string = 'postgresql+psycopg2://meu_usuario:minha_senha@192.168.183.1/postgres'
+# Criar o engine
 engine = create_engine(connection_string)
 
-# Crie um session maker
+# Criar o session maker
 Session = sessionmaker(bind=engine)
 
-# Crie uma classe base para seus modelos
-Base = declarative_base()  # Ajuste a importação
+# Criar a classe base para os modelos
+Base = declarative_base()
 
-# Defina o seu modelo
-class FormEntry(Base):
-    __tablename__ = 'exames'  # Nome explícito da tabela
-    id = Column(Integer, primary_key=True)
-    escola = Column(String(45), nullable=False)
-    data_hora = Column(DateTime, nullable=False)
-    sexo = Column(String(45), nullable=False)
-    nascimento = Column(Date, nullable=False)
-    nome = Column(String(45), nullable=False)
-    sobrenome = Column(String(45), nullable=False)
-    OD1 = Column(String(45), nullable=False)
-    OD2 = Column(String(45), nullable=False)
-    OD3 = Column(String(45), nullable=False)
-    C1 = Column(String(45), nullable=False)
-    C2 = Column(String(45), nullable=False)
-    OE1 = Column(String(45), nullable=False)
-    OE2 = Column(String(45), nullable=False)
-    OE3 = Column(String(45), nullable=False)
-    ODSE = Column(String(45), nullable=False)
-    ODOS = Column(String(45), nullable=False)
-    ODDC = Column(String(45), nullable=False)
-    ODAXIS = Column(String(45), nullable=False)
-    OESE = Column(String(45), nullable=False)
-    OEOS = Column(String(45), nullable=False)
-    OEDC = Column(String(45), nullable=False)
-    OEAXIS = Column(String(45), nullable=False)
+# Definir o modelo da tabela 'regiao_administrativa'
+class RegiaoAdministrativa(Base):
+    __tablename__ = 'regiao_administrativa'
+    id_regiao = Column(Integer, primary_key=True)
+    nome = Column(String(255), nullable=False)
+    estado = Column(String(2), nullable=False)
 
-# Crie as tabelas no banco de dados
+# Definir o modelo da tabela 'endereco'
+class Endereco(Base):
+    __tablename__ = 'endereco'
+    id_endereco = Column(Integer, primary_key=True)
+    logradouro = Column(String(255), nullable=True)
+    numero = Column(String(10), nullable=True)
+    complemento = Column(String(255), nullable=True)
+    bairro = Column(String(255), nullable=True)
+    cidade = Column(String(255), nullable=True)
+    estado = Column(String(2), nullable=True)
+    cep = Column(String(10), nullable=True)
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
+    id_regiao = Column(Integer, ForeignKey('regiao_administrativa.id_regiao'))
+
+# Definir o modelo da tabela 'escola'
+class Escola(Base):
+    __tablename__ = 'escola'
+    id_escola = Column(Integer, primary_key=True)
+    nome = Column(String(255), nullable=False)
+    id_endereco = Column(Integer, ForeignKey('endereco.id_endereco'))
+
+    endereco = relationship('Endereco', backref='escolas')
+
+# Definir o modelo da tabela 'aluno'
+class Aluno(Base):
+    __tablename__ = 'aluno'
+    id_aluno = Column(Integer, primary_key=True)
+    nome = Column(String(255), nullable=False)
+    data_nascimento = Column(Date, nullable=True)
+    sexo = Column(String(10), nullable=True)
+    id_escola = Column(Integer, ForeignKey('escola.id_escola'))
+    id_regiao = Column(Integer, ForeignKey('regiao_administrativa.id_regiao'))
+
+    escola = relationship('Escola', backref='alunos')
+    regiao = relationship('RegiaoAdministrativa', backref='alunos')
+
+# Definir o modelo da tabela 'exame'
+class Exame(Base):
+    __tablename__ = 'exame'
+    id_exame = Column(Integer, primary_key=True)
+    id_aluno = Column(Integer, ForeignKey('aluno.id_aluno'))
+    data_exame = Column(Date, nullable=False)
+    esferico_od = Column(Float, nullable=True)
+    cilindrico_od = Column(Float, nullable=True)
+    eixo_od = Column(Integer, nullable=True)
+    dioptria_esferica_od = Column(Float, nullable=True)
+    esferico_os = Column(Float, nullable=True)
+    cilindrico_os = Column(Float, nullable=True)
+    eixo_os = Column(Integer, nullable=True)
+    dioptria_esferica_os = Column(Float, nullable=True)
+    tamanho_pupila_od = Column(Float, nullable=True)
+    tamanho_pupila_os = Column(Float, nullable=True)
+    observacoes = Column(Text, nullable=True)
+
+    aluno = relationship('Aluno', backref='exames')
+
+# Criar o esquema 'num_piscar_de_olhos' se não existir
+with engine.connect() as connection:
+    connection.execute(text("CREATE SCHEMA IF NOT EXISTS num_piscar_de_olhos"))
+    connection.commit()
+
+# Criar as tabelas no banco (se ainda não existirem)
 Base.metadata.create_all(engine)
 
-# Crie uma sessão
+# Criar uma sessão
 session = Session()
 
-a = 0
-# Gere e insira dados no banco de dados
+# Definir escolas e regiões (para referência)
+escolas = [
+    Escola(nome="Escola Classe 308 Sul"),
+    Escola(nome="Escola Classe 108 Sul"),
+    Escola(nome="Colégio Cívico-Militar CED 03 de Sobradinho"),
+    Escola(nome="Escola Classe 15 de Planaltina"),
+    Escola(nome="Colégio Cívico-Militar CED Estância 3")
+]
+
+regioes = [
+    RegiaoAdministrativa(nome="Sul", estado="DF"),
+    RegiaoAdministrativa(nome="Sobradinho", estado="DF"),
+    RegiaoAdministrativa(nome="Planaltina", estado="DF"),
+    RegiaoAdministrativa(nome="Estância", estado="DF")
+]
+
+# Adicionar as escolas e regiões ao banco
+session.add_all(escolas)
+session.add_all(regioes)
+session.commit()
+
+# Gerar e inserir novos alunos e exames
+print("Gerando novos dados...")
+
 for i in range(30000):
-    a += 1
-    print(a)
-    genero = ["Masculino", "Feminino"]
-    escola = ["Escola Classe 308 Sul", "Escola Classe 108 Sul", "Colégio Cívico-Militar CED 03 de Sobradinho", "Colégio Cívico-Militar CED Estância 3", "Escola Classe 15 de Planaltina"]
-    axis1 = random.randint(0, 180)
-    axis2 = random.randint(0, 180)
+    if i % 1000 == 0:  # Mostrar progresso a cada 1000 registros
+        print(f"{i} registros inseridos...")
 
-    # Processar dados conforme necessário
-    novo_dado = FormEntry(
-        escola=random.choice(escola), data_hora='2024-' + f'{random.randint(1, 12):02}' + '-' + f'{random.randint(1, 28):02}' + 'T19:30', sexo=random.choice(genero), nascimento=f'{random.randint(2006, 2012)}-' + f'{random.randint(1, 12):02}-' + f'{random.randint(1, 28):02}', 
-        nome="nome", sobrenome="sobrenome", OD1=str(round(random.uniform(-1.0, 2.0), 2)), OD2=str(round(random.uniform(-1.0, 2.0), 2)), OD3=str(round(random.uniform(-1.0, 2.0), 2)), C1=str(round(random.uniform(-1.0, 2.0), 2)), 
-        C2=str(round(random.uniform(-1.0, 2.0), 2)), OE1=str(round(random.uniform(-1.0, 2.0), 2)), OE2=str(round(random.uniform(-1.0, 2.0), 2)), OE3=str(round(random.uniform(-1.0, 2.0), 2)), ODSE=str(round(random.uniform(-1.0, 2.0), 2)), ODOS=str(round(random.uniform(-1.0, 2.0), 2)), ODDC=str(round(random.uniform(-1.0, 2.0), 2)), 
-        ODAXIS='@' + str(axis1) + 'º', OESE=str(round(random.uniform(-1.0, 2.0), 2)), OEOS=str(round(random.uniform(-1.0, 2.0), 2)), OEDC=str(round(random.uniform(-1.0, 2.0), 2)), OEAXIS='@' + str(axis2) + 'º'
+    # Escolher aleatoriamente uma escola e uma região
+    escola = random.choice(escolas)
+    regiao = random.choice(regioes)
+
+    # Criar novo aluno
+    aluno = Aluno(
+        nome="Aluno" + str(i),
+        data_nascimento=f'{random.randint(2006, 2012)}-{random.randint(1, 12):02d}-{random.randint(1, 28):02d}',
+        sexo=random.choice(["Masculino", "Feminino"]),
+        id_escola=escola.id_escola,  # Usar o ID diretamente após o commit
+        id_regiao=regiao.id_regiao   # Usar o ID diretamente após o commit
     )
+    session.add(aluno)
+    session.flush()  # Garante que o id_aluno seja gerado antes de criar o exame
 
-    # Adicionar e comitar a nova entrada no banco de dados
-    session.add(novo_dado)
-    session.commit()
+    # Criar novo exame para o aluno
+    exame = Exame(
+        id_aluno=aluno.id_aluno,
+        data_exame=f'2024-{random.randint(1, 12):02d}-{random.randint(1, 28):02d}',
+        esferico_od=random.uniform(-1.0, 2.0),
+        cilindrico_od=random.uniform(-1.0, 2.0),
+        eixo_od=random.randint(0, 180),
+        dioptria_esferica_od=random.uniform(-1.0, 2.0),
+        esferico_os=random.uniform(-1.0, 2.0),
+        cilindrico_os=random.uniform(-1.0, 2.0),
+        eixo_os=random.randint(0, 180),
+        dioptria_esferica_os=random.uniform(-1.0, 2.0),
+        tamanho_pupila_od=random.uniform(2.0, 6.0),
+        tamanho_pupila_os=random.uniform(2.0, 6.0),
+        observacoes="Nenhuma"
+    )
+    session.add(exame)
+
+# Commitar todas as inserções
+session.commit()
+print("30,000 novos registros inseridos com sucesso!")
 
 # Fechar a sessão
 session.close()

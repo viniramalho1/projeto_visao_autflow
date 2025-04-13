@@ -12,25 +12,25 @@ services:
       - "5432:5432"
     restart: unless-stopped
 
-  web:
-    build: ./app
-    container_name: minha_aplicacao_web
-    environment:
-      DB_HOST: db
-      DB_NAME: minha_base
-      DB_USER: meu_usuario
-      DB_PASS: minha_senha
-    ports:
-      - "5000:5000"
-    depends_on:
-      - db
-    restart: unless-stopped
+  # web:
+  #   build: ./app
+  #   container_name: minha_aplicacao_web
+  #   environment:
+  #     DB_HOST: db
+  #     DB_NAME: minha_base
+  #     DB_USER: meu_usuario
+  #     DB_PASS: minha_senha
+  #   ports:
+  #     - "5000:5000"
+  #   depends_on:
+  #     - db
+  #   restart: unless-stopped
 
-  streamlit:
-    build: ./app/dash
-    container_name: minha_aplicacao_dash
-    ports:
-      - "8501:8501"
-    depends_on:
-      - db
-    restart: unless-stopped
+  # streamlit:
+  #   build: ./app/dash
+  #   container_name: minha_aplicacao_dash
+  #   ports:
+  #     - "8501:8501"
+  #   depends_on:
+  #     - db
+  #   restart: unless-stopped

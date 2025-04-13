@@ -35,6 +35,10 @@ class FormEntry(db.Model):
 def index():
     return render_template('index.html')
 
+@app.route('/exames')
+def exames():
+    return render_template('exames.html')
+
 @app.route('/formulario', methods=['POST'])
 def process_form():
     # Captura os dados do formulário
