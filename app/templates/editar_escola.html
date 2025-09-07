@@ -163,21 +163,13 @@
 
 <body>
   <nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container-fluid">
-      <img id="logosecretaria" src="{{ url_for('static', filename='images/SecretariaEducacao.png') }}" alt="Logo Secretaria Educação">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="bi bi-list"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <div class="navbar-nav ms-auto">
-          <a class="navbar-brand" href="{{ url_for('form_user') }}">Adicionar Aluno</a>
-          <a class="navbar-brand" href="{{ url_for('lista_exames') }}">Exames</a>
-          <a class="navbar-brand" href="{{ url_for('streamlit_dashboard') }}">Relatórios</a>
-          <a class="navbar-brand" href="{{ url_for('lista_escolas') }}">Escolas</a>
-          <a class="navbar-brand" href="{{ url_for('form_escola') }}">Nova Escola</a>
-        </div>
-      </div>
-    </div>
+    <img id="logosecretaria" src="static/images/SecretariaEducacao.png">
+    <a class="navbar-brand" href="{{ url_for('form_user') }}">Adicionar Aluno</a>
+    <a class="navbar-brand" href="/exames">Exames</a>
+    <a class="navbar-brand" href="{{ url_for('streamlit_dashboard') }}">Relatórios</a>
+    <a class="navbar-brand" href="{{ url_for('form_escola') }}">Escola</a>
+    <a class="navbar-brand" href="{{ url_for('lista_escolas') }}">Escolas</a>
+    <a class="navbar-brand" href="{{ url_for('lista_alunos') }}">Alunos</a>
   </nav>
 
   <div class="container mt-4">
