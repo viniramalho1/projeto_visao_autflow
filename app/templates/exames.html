@@ -78,10 +78,11 @@
     <body>
         <nav class="navbar navbar-expand-lg fixed-top">
             <img id="logosecretaria" src="static/images/SecretariaEducacao.png">
-            <a class="navbar-brand" href="/">Home</a>
-            <a class="navbar-brand" href="#">Dados Pessoais</a>
-            <a class="navbar-brand" href="exames.html">Exame</a>
+            <a class="navbar-brand" href="{{ url_for('index') }}">Home</a>
+            <a class="navbar-brand" href="{{ url_for('form_user') }}">Dados Pessoais</a>
+            <a class="navbar-brand" href="{{ url_for('exames') }}">Exame</a>
             <a class="navbar-brand" href="{{ url_for('streamlit_dashboard') }}">Relatórios</a>
+            <a class="navbar-brand" href="{{ url_for('form_escola') }}">Escola</a>
         </nav>
         
         <div class="container mt-5 pt-4">

@@ -15,11 +15,6 @@ services:
   # web:
   #   build: ./app
   #   container_name: minha_aplicacao_web
-  #   environment:
-  #     DB_HOST: db
-  #     DB_NAME: minha_base
-  #     DB_USER: meu_usuario
-  #     DB_PASS: minha_senha
   #   ports:
   #     - "5000:5000"
   #   depends_on:
