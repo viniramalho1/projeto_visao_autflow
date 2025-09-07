@@ -1,266 +1,213 @@
 <!doctype html>
 <html lang="pt-br">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Secretaria da Saúde - Lista de Exames</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <link href="static/css/style.css" rel="stylesheet">
-        <style>
-            /* Estilos específicos para esta página */
-            .table-container {
-                background-color: white;
-                border-radius: 10px;
-                padding: 20px;
-                box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                margin-top: 20px;
-            }
-            
-            .table th {
-                background-color: #ffcc29;
-                color: #515151;
-            }
-            
-            .action-buttons .btn {
-                margin: 0 5px;
-            }
-            
-            .btn-edit {
-                background-color: #ffcc29;
-                color: #515151;
-                border: none;
-            }
-            
-            .btn-edit:hover {
-                background-color: #ffb700;
-                color: #515151;
-            }
-            
-            .btn-delete {
-                background-color: #dc3545;
-                color: white;
-                border: none;
-            }
-            
-            .btn-delete:hover {
-                background-color: #c82333;
-                color: white;
-            }
-            
-            .search-container {
-                margin-bottom: 20px;
-            }
-            
-            .add-exam-btn {
-                background-color: #28a745;
-                color: white;
-                border: none;
-                margin-bottom: 20px;
-            }
-            
-            .add-exam-btn:hover {
-                background-color: #218838;
-                color: white;
-            }
-            
-            .pagination .page-item.active .page-link {
-                background-color: #ffcc29;
-                border-color: #ffcc29;
-                color: #515151;
-            }
-            
-            .pagination .page-link {
-                color: #515151;
-            }
-        </style>
-    </head>
-    <body>
-        <nav class="navbar navbar-expand-lg fixed-top">
-            <img id="logosecretaria" src="static/images/SecretariaEducacao.png">
-            <a class="navbar-brand" href="{{ url_for('index') }}">Home</a>
-            <a class="navbar-brand" href="{{ url_for('form_user') }}">Dados Pessoais</a>
-            <a class="navbar-brand" href="{{ url_for('exames') }}">Exame</a>
-            <a class="navbar-brand" href="{{ url_for('streamlit_dashboard') }}">Relatórios</a>
-            <a class="navbar-brand" href="{{ url_for('form_escola') }}">Escola</a>
-        </nav>
-        
-        <div class="container mt-5 pt-4">
-            <h2 class="mb-4">Lista de Exames</h2>
-            
-            <div class="d-flex justify-content-between mb-3">
-                <div class="search-container">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Pesquisar exames..." id="searchInput">
-                        <button class="btn btn-outline-secondary" type="button" id="searchButton">
-                            <i class="fas fa-search"></i>
-                        </button>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Secretaria da Saúde - Lista de Exames</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        nav {
+            width: 100%;
+            margin: 0px 0px 0px;
+            background-color: #ffcc29;
+            color: #515151;
+        }
+
+        .navbar-brand {
+            margin: 0px 20px 0px;
+            color: #515151;
+        }
+
+        .navbar-brand:hover {
+            color: #ff6900;
+        }
+
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #logosecretaria {
+            width: 200px;
+            height: 50px;
+        }
+
+        body {
+            padding-top: 70px;
+            /* espaço pra navbar fixa */
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+    <img id="logosecretaria" src="static/images/SecretariaEducacao.png">
+    <a class="navbar-brand" href="{{ url_for('form_user') }}">Adicionar Aluno</a>
+    <a class="navbar-brand" href="/exames">Exames</a>
+    <a class="navbar-brand" href="{{ url_for('streamlit_dashboard') }}">Relatórios</a>
+    <a class="navbar-brand" href="{{ url_for('form_escola') }}">Escola</a>
+    <a class="navbar-brand" href="{{ url_for('escolas') }}">Escolas</a>
+    <a class="navbar-brand" href="{{ url_for('alunos') }}">Alunos</a>
+  </nav>
+
+    <div class="container mt-5">
+        <h2 class="mb-4 text-darkgray">Lista de Exames</h2>
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input id="searchInput" type="text" class="form-control" placeholder="Pesquisar exames...">
+                            <button id="searchButton" class="btn btn-outline-secondary"><i
+                                    class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <a href="{{ url_for('editar_exame', id=0) }}" class="btn add-exam-btn">
+                            <i class="fas fa-plus"></i> Adicionar Exame
+                        </a>
                     </div>
                 </div>
-                <button class="btn add-exam-btn" onclick="location.href='formulario.html'">
-                    <i class="fas fa-plus"></i> Adicionar Novo Exame
-                </button>
-            </div>
-            
-            <div class="table-container">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Sobrenome</th>
-                            <th>Data Nascimento</th>
-                            <th>Escola</th>
-                            <th>Data Exame</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Exemplo de dados estáticos - na prática, isso viria de um banco de dados -->
-                        <tr>
-                            <td>1</td>
-                            <td>João</td>
-                            <td>Silva</td>
-                            <td>15/05/2010</td>
-                            <td>Escola Municipal A</td>
-                            <td>27/05/2024 10:30</td>
-                            <td class="action-buttons">
-                                <button class="btn btn-sm btn-edit" onclick="editarExame(1)">
-                                    <i class="fas fa-edit"></i> Editar
-                                </button>
-                                <button class="btn btn-sm btn-delete" onclick="confirmarExclusao(1)">
-                                    <i class="fas fa-trash"></i> Excluir
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Maria</td>
-                            <td>Santos</td>
-                            <td>22/08/2011</td>
-                            <td>Escola Estadual B</td>
-                            <td>28/05/2024 14:15</td>
-                            <td class="action-buttons">
-                                <button class="btn btn-sm btn-edit" onclick="editarExame(2)">
-                                    <i class="fas fa-edit"></i> Editar
-                                </button>
-                                <button class="btn btn-sm btn-delete" onclick="confirmarExclusao(2)">
-                                    <i class="fas fa-trash"></i> Excluir
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Carlos</td>
-                            <td>Oliveira</td>
-                            <td>10/03/2012</td>
-                            <td>Escola Particular C</td>
-                            <td>29/05/2024 09:00</td>
-                            <td class="action-buttons">
-                                <button class="btn btn-sm btn-edit" onclick="editarExame(3)">
-                                    <i class="fas fa-edit"></i> Editar
-                                </button>
-                                <button class="btn btn-sm btn-delete" onclick="confirmarExclusao(3)">
-                                    <i class="fas fa-trash"></i> Excluir
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <!-- Paginação -->
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Anterior</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Próxima</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-        
-        <!-- Modal de Confirmação de Exclusão -->
-        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Tem certeza que deseja excluir este exame? Esta ação não pode ser desfeita.
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Excluir</button>
-                    </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle">
+                        <thead class="table-warning text-dark">
+                            <tr>
+                                <th>Cod.</th>
+                                <th>Aluno</th>
+                                <th>Escola</th>
+                                <th>Data</th>
+                                <th>Esf OD</th>
+                                <th>Esf OS</th>
+                                <th>Pup OD</th>
+                                <th>Pup OS</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ex in exames %}
+                            <tr>
+                                <td>{{ ex.id_exame }}</td>
+                                <td>
+                                    {{ ex.aluno.nome }}<br>
+                                    <small class="text-muted">{{ ex.aluno.sexo }}, {{
+                                        ex.aluno.data_nascimento.strftime('%d/%m/%Y')
+                                        }}</small>
+                                </td>
+                                <td>{{ ex.aluno.escola.nome }}</td>
+                                <td>{{ ex.data_hora_escaneamento.strftime('%d/%m/%Y') }}</td>
+                                <td>{{ '%.2f'|format(ex.ds_direito) }}</td>
+                                <td>{{ '%.2f'|format(ex.ds_esquerdo) }}</td>
+                                <td>{{ ex.tamanho_pupila_od }}</td>
+                                <td>{{ ex.tamanho_pupila_os }}</td>
+                                <td class="actions-col">
+                                    <div class="action-buttons">
+                                        <a href="{{ url_for('editar_exame', id=ex.id_exame) }}"
+                                            class="btn btn-edit btn-sm"><i class="fas fa-edit"></i></a>
+                                        <form action="{{ url_for('excluir_exame', id=ex.id_exame) }}" method="post"
+                                            style="display:inline;">
+                                            <button type="submit" class="btn btn-delete btn-sm"><i
+                                                    class="fas fa-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="9" class="text-center">Nenhum exame cadastrado.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-        <script>
-            // Variável para armazenar o ID do exame a ser excluído
-            let exameIdToDelete = null;
-            
-            // Função para editar um exame
-            function editarExame(id) {
-                // Redirecionar para a página de edição com o ID do exame
-                window.location.href = `formulario.html?edit=${id}`;
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza que deseja excluir este exame? Esta ação não pode ser desfeita.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script>
+        // Variável para armazenar o ID do exame a ser excluído
+        let exameIdToDelete = null;
+
+        // Função para editar um exame
+        function editarExame(id) {
+            // Redirecionar para a página de edição com o ID do exame
+            window.location.href = `formulario.html?edit=${id}`;
+        }
+
+        // Função para confirmar a exclusão de um exame
+        function confirmarExclusao(id) {
+            exameIdToDelete = id;
+            const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            modal.show();
+        }
+
+        // Função para excluir um exame após confirmação
+        document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+            if (exameIdToDelete) {
+                // Aqui você faria uma requisição AJAX para excluir o exame do banco de dados
+                console.log(`Exame com ID ${exameIdToDelete} excluído`);
+
+                // Atualizar a lista de exames (na prática, você recarregaria os dados do servidor)
+                alert(`Exame com ID ${exameIdToDelete} excluído com sucesso!`);
+
+                // Fechar o modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
+                modal.hide();
+
+                // Recarregar a página (em uma aplicação real, você atualizaria apenas a tabela via AJAX)
+                location.reload();
             }
-            
-            // Função para confirmar a exclusão de um exame
-            function confirmarExclusao(id) {
-                exameIdToDelete = id;
-                const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-                modal.show();
-            }
-            
-            // Função para excluir um exame após confirmação
-            document.getElementById('confirmDeleteButton').addEventListener('click', function() {
-                if (exameIdToDelete) {
-                    // Aqui você faria uma requisição AJAX para excluir o exame do banco de dados
-                    console.log(`Exame com ID ${exameIdToDelete} excluído`);
-                    
-                    // Atualizar a lista de exames (na prática, você recarregaria os dados do servidor)
-                    alert(`Exame com ID ${exameIdToDelete} excluído com sucesso!`);
-                    
-                    // Fechar o modal
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
-                    modal.hide();
-                    
-                    // Recarregar a página (em uma aplicação real, você atualizaria apenas a tabela via AJAX)
-                    location.reload();
+        });
+
+        // Função de pesquisa
+        document.getElementById('searchButton').addEventListener('click', function () {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('tbody tr');
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
                 }
             });
-            
-            // Função de pesquisa
-            document.getElementById('searchButton').addEventListener('click', function() {
-                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-                const rows = document.querySelectorAll('tbody tr');
-                
-                rows.forEach(row => {
-                    const text = row.textContent.toLowerCase();
-                    if (text.includes(searchTerm)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
-            
-            // Permitir pesquisa ao pressionar Enter
-            document.getElementById('searchInput').addEventListener('keyup', function(event) {
-                if (event.key === 'Enter') {
-                    document.getElementById('searchButton').click();
-                }
-            });
-        </script>
-    </body>
-</html>
+        });
+
+        // Permitir pesquisa ao pressionar Enter
+        document.getElementById('searchInput').addEventListener('keyup', function (event) {
+            if (event.key === 'Enter') {
+                document.getElementById('searchButton').click();
+            }
+        });
+    </script>
+
+</body>
+
+</html>f

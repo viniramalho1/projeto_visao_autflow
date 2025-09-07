@@ -5,3 +5,6 @@ SQLAlchemy
 pymysql
 psycopg2-binary
 plotly
+streamlit-aggrid
+folium
+streamlit-folium

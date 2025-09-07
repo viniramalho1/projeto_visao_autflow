@@ -63,21 +63,21 @@
 
 <body>
     <nav class="navbar navbar-expand-lg fixed-top">
-    <img id="logosecretaria" src="static/images/SecretariaEducacao.png">
-    <a class="navbar-brand" href="{{ url_for('form_user') }}">Adicionar Aluno</a>
-    <a class="navbar-brand" href="/exames">Exames</a>
-    <a class="navbar-brand" href="{{ url_for('streamlit_dashboard') }}">Relatórios</a>
-    <a class="navbar-brand" href="{{ url_for('form_escola') }}">Escola</a>
-    <a class="navbar-brand" href="{{ url_for('escolas') }}">Escolas</a>
-    <a class="navbar-brand" href="{{ url_for('alunos') }}">Alunos</a>
-  </nav>
+        <img id="logosecretaria" src="static/images/SecretariaEducacao.png">
+        <a class="navbar-brand" href="{{ url_for('form_user') }}">Adicionar Aluno</a>
+        <a class="navbar-brand" href="/exames">Exames</a>
+        <a class="navbar-brand" href="{{ url_for('streamlit_dashboard') }}">Relatórios</a>
+        <a class="navbar-brand" href="{{ url_for('form_escola') }}">Escola</a>
+        <a class="navbar-brand" href="{{ url_for('escolas') }}">Escolas</a>
+        <a class="navbar-brand" href="{{ url_for('alunos') }}">Alunos</a>
+    </nav>
     <br>
 
     <div id="pagina">
-        <form action="/formulario" method="post">
-            {# Se existir um objeto `aluno`, incluímos hidden #}
-            {% if aluno %}
-            <input type="hidden" name="aluno_id" value="{{ aluno.id_aluno }}">
+        <form action="{{ url_for('editar_exame', id=exame.id_exame) }}" method="post">
+            {# Hidden field para id do aluno #}
+            {% if exame.aluno %}
+            <input type="hidden" name="id_aluno" value="{{ exame.aluno.id_aluno }}">
             {% endif %}
 
             <!-- ==================== Ajuste mínimo para posicionar “Data/Hora” e “Nome” acima do “DIP” ==================== -->
@@ -94,15 +94,16 @@
                         <div class="mb-3" id="divDataHora" style="max-width: 300px;">
                             <label for="InputDataHoraEscaneamento" id="DataHoraEscaneamento">Data/Hora
                                 Escaneamento</label>
-                            <input type="datetime-local" value="2024-05-27T19:30" min="2024-01-01T00:00"
-                                max="2026-12-31T00:00" class="form-control" id="InputDataHoraEscaneamento"
-                                name="InputDataHoraEscaneamento">
+                            <input type="datetime-local" class="form-control" id="InputDataHoraEscaneamento"
+                                name="InputDataHoraEscaneamento" min="2024-01-01T00:00" max="2026-12-31T00:00" required
+                                {% if exame.data_hora_escaneamento %}
+                                value="{{ exame.data_hora_escaneamento.strftime('%Y-%m-%dT%H:%M') }}" {% endif %}>
                         </div>
                         <!-- Nome (mesma largura do campo de Data/Hora) -->
                         <div class="mb-3 mt-3" id="divNome" style="max-width: 300px;">
                             <label for="InputNome" id="Nome">Nome</label>
                             <input type="text" class="form-control" id="InputNome" name="InputNome"
-                                value="{{ aluno.nome if aluno else '' }}">
+                                value="{{ exame.aluno.nome if exame.aluno else '' }}" readonly>
                         </div>
                     </div>
 
@@ -123,11 +124,13 @@
                     <div class="col d-flex flex-column align-items-center mb-3" id="primeira">
                         <div class="mb-3 w-100">
                             <input type="text" class="form-control" id="raio_corneano_od_mm" name="raio_corneano_od_mm"
-                                placeholder="Raio OD (mm)">
+                                placeholder="Raio OD (mm)"
+                                value="{{ exame.raio_corneano_od_mm if exame.raio_corneano_od_mm is not none else '' }}">
                         </div>
                         <div class="mb-3 w-100">
                             <input type="text" class="form-control" id="eixo_querato_steeper_od"
-                                name="eixo_querato_steeper_od" placeholder="Eixo Steeper OD">
+                                name="eixo_querato_steeper_od" placeholder="Eixo Steeper OD"
+                                value="{{ exame.eixo_querato_steeper_od if exame.eixo_querato_steeper_od is not none else '' }}">
                         </div>
 
                         <!-- Mantive exatamente a imagem “reta.png” no mesmo lugar -->
@@ -136,7 +139,8 @@
 
                         <div class="mb-3 w-100">
                             <input type="text" class="form-control" id="eixo_querato_flatter_od"
-                                name="eixo_querato_flatter_od" placeholder="Eixo Flatter OD">
+                                name="eixo_querato_flatter_od" placeholder="Eixo Flatter OD"
+                                value="{{ exame.eixo_querato_flatter_od if exame.eixo_querato_flatter_od is not none else '' }}">
                         </div>
                         <h1 class="mt-2">OD</h1>
                     </div>
@@ -153,15 +157,20 @@
                         </div>
                         <div id="InputsGrau">
                             <div id="Inputs">
-                                <input type="text" placeholder="SE" class="form-control" id="Input9" name="Input9">
+                                <input type="text" placeholder="SE" class="form-control" id="SE_Direito"
+                                    name="SE_Direito" required {% if exame.se_direito is not none %}
+                                    value="{{ exame.se_direito }}" {% endif %}>
                             </div>
                             <div id="Inputs">
                                 <input type="text" placeholder="DS" class="form-control" id="DS_Direito"
-                                    name="DS_Direito">
+                                    name="DS_Direito" required {% if exame.ds_direito is not none %}
+                                    value="{{ exame.ds_direito }}" {% endif %}>
                                 <input type="text" placeholder="DC" class="form-control" id="DC_Direito"
-                                    name="DC_Direito">
+                                    name="DC_Direito" required {% if exame.dc_direito is not none %}
+                                    value="{{ exame.dc_direito }}" {% endif %}>
                                 <input type="text" placeholder="Axis" class="form-control" id="Axis_Direito"
-                                    name="Axis_Direito">
+                                    name="Axis_Direito" required {% if exame.axis_direito is not none %}
+                                    value="{{ exame.axis_direito }}" {% endif %}>
                             </div>
                         </div>
                     </div>
@@ -178,8 +187,9 @@
                     <!-- ─────────────────────────────────────────────────────────── -->
                     <div class="col d-flex flex-column align-items-center mb-3" id="terceira">
                         <div class="w-100 mb-3">
-                            <input type="text" class="form-control" id="distancia_interpupilar_mm"
-                                name="distancia_interpupilar_mm" placeholder="DIP (mm)">
+                            <input type="number" step="0.1" id="distancia_interpupilar_mm"
+                                name="distancia_interpupilar_mm" class="form-control" required
+                                value="{{ exame.distancia_interpupilar_mm if exame.distancia_interpupilar_mm is not none else '' }}">
                         </div>
                     </div>
 
@@ -201,19 +211,22 @@
                                     alt="Olho Esquerdo" class="img-fluid mb-2">
                             </div>
                         </div>
-                        <!-- Mesma largura de 360px usada no lado esquerdo para simetria -->
                         <div id="InputsGrau">
                             <div id="Inputs">
                                 <input type="text" placeholder="SE" class="form-control" id="SE_Esquerdo"
-                                    name="SE_Esquerdo">
+                                    name="SE_Esquerdo" required {% if exame.se_esquerdo is not none %}
+                                    value="{{ exame.se_esquerdo }}" {% endif %}>
                             </div>
                             <div id="Inputs">
                                 <input type="text" placeholder="DS" class="form-control" id="DS_Esquerdo"
-                                    name="DS_Esquerdo">
+                                    name="DS_Esquerdo" required {% if exame.ds_esquerdo is not none %}
+                                    value="{{ exame.ds_esquerdo }}" {% endif %}>
                                 <input type="text" placeholder="DC" class="form-control" id="DC_Esquerdo"
-                                    name="DC_Esquerdo">
+                                    name="DC_Esquerdo" required {% if exame.dc_esquerdo is not none %}
+                                    value="{{ exame.dc_esquerdo }}" {% endif %}>
                                 <input type="text" placeholder="Axis" class="form-control" id="Axis_Esquerdo"
-                                    name="Axis_Esquerdo">
+                                    name="Axis_Esquerdo" required {% if exame.axis_esquerdo is not none %}
+                                    value="{{ exame.axis_esquerdo }}" {% endif %}>
                             </div>
                         </div>
                     </div>
@@ -223,19 +236,23 @@
                     <!-- ─────────────────────────────────────────────────────────── -->
                     <div class="col d-flex flex-column align-items-center mb-3" id="quinta">
                         <div class="w-100 mb-3">
-                            <input type="text" class="form-control" id="raio_corneano_os_mm" name="raio_corneano_os_mm"
-                                placeholder="Raio OS (mm)">
+                            <!-- Corrigido para nome “raio_corneano_os_mm” -->
+                            <input type="text" class="form-control" id="raio_corneano_os_mm"
+                                name="raio_corneano_os_mm"
+                                value="{{ exame.raio_corneano_os_mm if exame.raio_corneano_os_mm is not none else '' }}">
                         </div>
                         <div class="w-100 mb-3">
                             <input type="text" class="form-control" id="eixo_querato_steeper_os"
-                                name="eixo_querato_steeper_os" placeholder="Eixo Steeper OS">
+                                name="eixo_querato_steeper_os"
+                                value="{{ exame.eixo_querato_steeper_os if exame.eixo_querato_steeper_os is not none else '' }}">
                         </div>
                         <img id="reta" src="{{ url_for('static', filename='images/reta.png') }}" alt="Reta OS"
                             class="img-fluid mb-3">
 
                         <div class="w-100 mb-3">
                             <input type="text" class="form-control" id="eixo_querato_flatter_os"
-                                name="eixo_querato_flatter_os" placeholder="Eixo Flatter OS">
+                                name="eixo_querato_flatter_os"
+                                value="{{ exame.eixo_querato_flatter_os if exame.eixo_querato_flatter_os is not none else '' }}">
                         </div>
                         <h1 class="mt-2">OS</h1>
                     </div>

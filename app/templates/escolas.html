@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Secretaria da Saúde - Escolas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --color-primary: #ffcc29;
+      --color-secondary: #ff6900;
+      --color-dark: #515151;
+      --color-light: #f5f5f5;
+      --color-table-header: #fff8df;
+      --color-badge: #ffe08a;
+    }
+    
+    body {
+      padding-top: 76px;
+      background-color: var(--color-light);
+      color: var(--color-dark);
+    }
+    
+    /* Navbar */
+    .navbar {
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 0.5rem 1rem;
+    }
+    
+    #logosecretaria {
+      width: 200px;
+      height: 50px;
+      object-fit: contain;
+    }
+    
+    .navbar-brand {
+      color: var(--color-dark);
+      padding: 0.5rem;
+      margin: 0;
+      border-radius: 0.25rem;
+      transition: all 0.3s ease;
+    }
+    
+    .navbar-brand:hover, 
+    .navbar-brand:focus {
+      color: var(--color-secondary);
+      background-color: rgba(255, 204, 41, 0.1);
+    }
+    
+    .navbar-toggler {
+      border: none;
+      padding: 0.25rem 0.5rem;
+    }
+    
+    .navbar-toggler:focus {
+      box-shadow: 0 0 0 2px rgba(255, 204, 41, 0.5);
+    }
+    
+    /* Table styles */
+    .table thead th {
+      background: var(--color-table-header);
+      border-bottom: 2px solid var(--color-primary);
+      padding: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .badge-ra {
+      background: var(--color-badge);
+      color: #333;
+      font-weight: 500;
+      padding: 0.35em 0.65em;
+    }
+    
+    /* Action buttons */
+    .btn-action {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.875rem;
+      margin: 0 2px;
+    }
+    
+    /* Responsive table container */
+    .table-container {
+      background: white;
+      border-radius: 0.375rem;
+      overflow: hidden;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    
+    /* Mobile card view for table rows */
+    .school-card {
+      display: none;
+      border-bottom: 1px solid #dee2e6;
+      padding: 1rem;
+    }
+    
+    .school-card .card-field {
+      margin-bottom: 0.5rem;
+    }
+    
+    .school-card .card-label {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    
+    /* Responsive utilities */
+    @media (max-width: 992px) {
+      #logosecretaria {
+        width: 160px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .table thead {
+        display: none;
+      }
+      
+      .table tbody tr {
+        display: none;
+      }
+      
+      .school-card {
+        display: block;
+      }
+      
+      .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .d-flex.justify-content-between h3 {
+        margin-bottom: 0;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      body {
+        padding-top: 66px;
+      }
+      
+      #logosecretaria {
+        width: 140px;
+        height: 40px;
+      }
+      
+      .navbar-brand {
+        font-size: 0.9rem;
+        padding: 0.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <img id="logosecretaria" src="static/images/SecretariaEducacao.png">
+    <a class="navbar-brand" href="{{ url_for('form_user') }}">Adicionar Aluno</a>
+    <a class="navbar-brand" href="/exames">Exames</a>
+    <a class="navbar-brand" href="{{ url_for('streamlit_dashboard') }}">Relatórios</a>
+    <a class="navbar-brand" href="{{ url_for('form_escola') }}">Escola</a>
+    <a class="navbar-brand" href="{{ url_for('escolas') }}">Escolas</a>
+    <a class="navbar-brand" href="{{ url_for('alunos') }}">Alunos</a>
+  </nav>
+
+  <div class="container mt-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h3 class="mb-0">Escolas Cadastradas</h3>
+      <a href="{{ url_for('form_escola') }}" class="btn btn-warning">
+        <i class="bi bi-plus-circle me-1"></i> Nova Escola
+      </a>
+    </div>
+
+    <div class="table-container">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>Endereço</th>
+            <th>Cidade/UF</th>
+            <th>CEP</th>
+            <th>Região Adm.</th>
+            <th class="text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in escolas %}
+          <tr>
+            <td>{{ e.id_escola }}</td>
+            <td class="fw-semibold">{{ e.nome }}</td>
+            <td>
+              {{ e.logradouro }}, {{ e.numero }}
+              {% if e.complemento %} - {{ e.complemento }}{% endif %}<br>
+              <small class="text-muted">{{ e.bairro }}</small>
+            </td>
+            <td>{{ e.cidade }}/{{ e.estado }}</td>
+            <td>{{ e.cep }}</td>
+            <td><span class="badge badge-ra">{{ e.regiao_administrativa }}</span></td>
+            <td class="text-center">
+              <div class="d-flex justify-content-center">
+                <a href="{{ url_for('editar_escola', id=e.id_escola) }}" class="btn btn-sm btn-primary btn-action" title="Editar">
+                  <i class="bi bi-pencil"></i>
+                </a>
+                <form action="{{ url_for('excluir_escola', id=e.id_escola) }}" method="post" class="d-inline"
+                      onsubmit="return confirm('Tem certeza que deseja excluir esta escola?');">
+                  <button type="submit" class="btn btn-sm btn-outline-danger btn-action" title="Excluir">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- Mobile Card View -->
+          <tr class="school-card">
+            <td colspan="7">
+              <div class="card-field">
+                <span class="card-label">ID:</span> {{ e.id_escola }}
+              </div>
+              <div class="card-field">
+                <span class="card-label">Nome:</span> {{ e.nome }}
+              </div>
+              <div class="card-field">
+                <span class="card-label">Endereço:</span> 
+                {{ e.logradouro }}, {{ e.numero }}
+                {% if e.complemento %} - {{ e.complemento }}{% endif %}, {{ e.bairro }}
+              </div>
+              <div class="card-field">
+                <span class="card-label">Cidade/UF:</span> {{ e.cidade }}/{{ e.estado }}
+              </div>
+              <div class="card-field">
+                <span class="card-label">CEP:</span> {{ e.cep }}
+              </div>
+              <div class="card-field">
+                <span class="card-label">Região Adm.:</span> 
+                <span class="badge badge-ra">{{ e.regiao_administrativa }}</span>
+              </div>
+              <div class="card-field d-flex justify-content-start mt-2">
+                <a href="{{ url_for('editar_escola', id=e.id_escola) }}" class="btn btn-sm btn-primary btn-action me-2">
+                  <i class="bi bi-pencil me-1"></i> Editar
+                </a>
+                <form action="{{ url_for('excluir_escola', id=e.id_escola) }}" method="post" class="d-inline"
+                      onsubmit="return confirm('Tem certeza que deseja excluir esta escola?');">
+                  <button type="submit" class="btn btn-sm btn-outline-danger btn-action">
+                    <i class="bi bi-trash me-1"></i> Excluir
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="7" class="text-center text-muted py-4">Nenhuma escola cadastrada.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+          crossorigin="anonymous"></script>
+</body>
+</html>
